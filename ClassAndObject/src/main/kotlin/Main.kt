@@ -1,9 +1,7 @@
-open class SmartDevice(val name: String, val category: String) {
+open class SmartDevice (val name: String, val category: String) {
 
     var deviceStatus = "online"
-        protected set(value) {
-            field = value
-        }
+        protected set
 
     open val deviceType = "unknown"
 
@@ -21,14 +19,14 @@ class SmartTvDevice(deviceName: String, deviceCategory: String) :
 
     override val deviceType = "Smart TV"
 
-    var speakerVolume = 2
+    private var speakerVolume = 2
         set(value) {
             if (value in 0..100) {
                 field = value
             }
         }
 
-    var channelNumber = 1
+    private var channelNumber = 1
         set(value) {
             if (value in 0..200) {
                 field = value
@@ -64,7 +62,7 @@ class SmartLightDevice(deviceName: String, deviceCategory: String) :
 
     override val deviceType = "Smart Light"
 
-    var brightnessLevel = 0
+    private var brightnessLevel = 0
         set(value) {
             if (value in 0..100) {
                 field = value
@@ -94,11 +92,16 @@ class SmartHome(
     val smartLightDevice: SmartLightDevice
 ) {
 
+    var deviceTurnOnCount = 0
+        private set
+
     fun turnOnTv() {
+        deviceTurnOnCount++
         smartTvDevice.turnOn()
     }
 
     fun turnOffTv() {
+        deviceTurnOnCount--
         smartTvDevice.turnOff()
     }
 
@@ -111,10 +114,12 @@ class SmartHome(
     }
 
     fun turnOnLight() {
+        deviceTurnOnCount++
         smartLightDevice.turnOn()
     }
 
     fun turnOffLight() {
+        deviceTurnOnCount--
         smartLightDevice.turnOff()
     }
 
