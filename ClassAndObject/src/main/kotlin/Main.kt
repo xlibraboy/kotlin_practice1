@@ -21,11 +21,11 @@ open class SmartDevice (val name: String, val category: String) {
 class SmartTvDevice(deviceName: String, deviceCategory: String) :
     SmartDevice(name = deviceName, category = deviceCategory) {
 
-    var speakerVolume by RangeRegulator(0,0,100)
-
-    var channelNumber by RangeRegulator(1,0,200)
-
     override val deviceType = "Smart TV"
+
+    private var speakerVolume by RangeRegulator(0,0,100)
+
+    private var channelNumber by RangeRegulator(1,0,200)
 
     override fun turnOn() {
         super.turnOn()
@@ -56,8 +56,8 @@ class SmartLightDevice(deviceName: String, deviceCategory: String) :
 
     override val deviceType = "Smart Light"
 
-    var brightnessLevel by RangeRegulator(2,0,100)
-    
+    private var brightnessLevel by RangeRegulator(2,0,100)
+
     override fun turnOn() {
         super.turnOn()
         brightnessLevel = 2
@@ -128,7 +128,7 @@ class RangeRegulator(
     private val minValue: Int,
     private val maxValue: Int
 ) : ReadWriteProperty<Any?, Int> {
-    var fieldData = initialValue
+    private var fieldData = initialValue
 
     override fun getValue(thisRef: Any?, property: KProperty<*>): Int {
         return fieldData
@@ -142,9 +142,21 @@ class RangeRegulator(
 }
 
 fun main() {
-    var smartDevice: SmartDevice = SmartTvDevice("Android TV", "Entertainment")
-    smartDevice.turnOff()
+    val smartHome = SmartHome(
+        SmartTvDevice("Android TV","Entertainment"),
+        SmartLightDevice("Google Light", "Utility")
+    )
 
-    smartDevice = SmartLightDevice("Google Light", "Utility")
-    smartDevice.turnOff()
+    smartHome.turnOnTv()
+    smartHome.turnOnLight()
+    println("Total number of devices currently turned on: ${smartHome.deviceTurnOnCount}.")
+    println()
+
+    smartHome.increaseSpeakerVolume()
+    smartHome.changeTvChannelToNext()
+    smartHome.increaseLightBrightness()
+    println()
+
+    smartHome.turnOffAllDevices()
+    println("Total number of devices currently turned on: ${smartHome.deviceTurnOnCount}.")
 }
