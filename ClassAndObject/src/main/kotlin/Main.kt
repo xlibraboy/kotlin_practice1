@@ -4,6 +4,10 @@ import kotlin.reflect.KProperty
 
 open class SmartDevice (val name: String, val category: String) {
 
+    fun printDeviceInfo() {
+        println("Device name: $name, category: $category, type: $deviceType.")
+    }
+
     var deviceStatus = "online"
         protected set
 
@@ -49,6 +53,17 @@ class SmartTvDevice(deviceName: String, deviceCategory: String) :
         channelNumber++
         println("Channel number increased to $channelNumber.")
     }
+
+    fun decreaseVolume() {
+        speakerVolume--
+        println("Speaker volume decreased to $speakerVolume.")
+    }
+
+    fun previousChannel() {
+        channelNumber--
+        println("Channel number decreased to $channelNumber.")
+    }
+
 }
 
 class SmartLightDevice(deviceName: String, deviceCategory: String) :
@@ -74,12 +89,38 @@ class SmartLightDevice(deviceName: String, deviceCategory: String) :
         brightnessLevel++
         println("Brightness increased to $brightnessLevel.")
     }
+
+    fun decreaseBrightness() {
+        brightnessLevel--
+        println("Brightness decreased to $brightnessLevel.")
+    }
+
 }
 
 class SmartHome(
     val smartTvDevice: SmartTvDevice,
     val smartLightDevice: SmartLightDevice
 ) {
+
+    fun decreaseTvVolume() {
+        smartTvDevice.decreaseVolume()
+    }
+
+    fun changeTvChannelToPrevious() {
+        smartTvDevice.previousChannel()
+    }
+
+    fun printSmartTvInfo() {
+        smartTvDevice.printDeviceInfo()
+    }
+
+    fun printSmartLightInfo() {
+        smartLightDevice.printDeviceInfo()
+    }
+
+    fun decreaseLightBrightness() {
+        smartLightDevice.decreaseBrightness()
+    }
 
     var deviceTurnOnCount = 0
         private set
@@ -157,6 +198,17 @@ fun main() {
     smartHome.increaseLightBrightness()
     println()
 
+    smartHome.printSmartTvInfo()
+    smartHome.printSmartLightInfo()
+    println()
+
+    smartHome.decreaseTvVolume()
+    smartHome.changeTvChannelToPrevious()
+    smartHome.decreaseLightBrightness()
+    println()
+
     smartHome.turnOffAllDevices()
     println("Total number of devices currently turned on: ${smartHome.deviceTurnOnCount}.")
+
+
 }
